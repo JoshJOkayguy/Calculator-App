@@ -52,12 +52,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   void _onOperatorPressed(String operator) {
     setState(() {
-      if (!_startNewNumber) {
-        // Just finished entering a number, add the operator
-        _expression += ' $operator ';
+      if (operator == '^2') {
+        _expression += '*$_displayValue ';
         _startNewNumber = true;
-      } else if (_expression.isNotEmpty) {
-        // We have a result from previous operation, add operator to continue
+        return;
+      } 
+      
+      if (!_startNewNumber || _expression.isNotEmpty) {
+        // Just finished entering a number, add the operator
         _expression += ' $operator ';
         _startNewNumber = true;
       }
@@ -268,36 +270,21 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   _buildButton('2', onPressed: () => _onNumberPressed('2')),
                   _buildButton('3', onPressed: () => _onNumberPressed('3')),
                   _buildButton(
-                    '=',
-                    color: Colors.green[400],
-                    onPressed: _onEquals,
+                    'x²', 
+                    color: Colors.blue[400],
+                    onPressed: () => _onOperatorPressed('^2'),
                   ),
                 ],
               ),
               Row(
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[300],
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(vertical: 24),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        onPressed: () => _onNumberPressed('0'),
-                        child: const Text(
-                          '0',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _buildButton('0', onPressed: () => _onNumberPressed('0')),
                   _buildButton('.', onPressed: _onDecimal),
+                  _buildButton(
+                    '=',
+                    color: Colors.green[400],
+                    onPressed: _onEquals,
+                  ),
                 ],
               ),
             ],
